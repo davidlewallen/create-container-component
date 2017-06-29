@@ -1,56 +1,15 @@
 #!/usr/bin/env node
-
-import inquirer from 'inquirer'
-import fs from 'fs-extra'
-import yargs from 'yargs'
-import { generateComponentTemplate, generateStyleFile, generateIndexFile } from './templates'
-import questions from './questions'
-
-// Dynamically import the config file if exist
-const configPath = yargs.argv.config
-const config = configPath ? require(`${process.cwd()}/${configPath}`) : null
-
-/**
- * Generate component files
- *
- * @param {type} type of component template
- * @param {name} the name of the component used to create folder and file
- * @param {path} where the component folder is created
- * @param {cssExtension} the extension of the css file
- * @param {jsExtension} the extension of the css file
- */
-function generateFiles({ type, name, path, indexFile, cssExtension, jsExtension, connected }) {
-  const destination = `${path}/${name}`
-
-  if (indexFile || connected) {
-    fs.outputFile(`${destination}/index.js`, generateIndexFile(name, connected))
-  }
-    // Create js file
-  fs.outputFile(`${destination}/${name}.${jsExtension}`, generateComponentTemplate(type, name))
-
-    // Create css file
-  fs.outputFile(`${destination}/${name}.${cssExtension}`, generateStyleFile(name))
-}
+import inquirer from 'inquirer';
+import generateBoilerplate from './templates';
+import questions from './questions';
 
 /**
  * Generate questions filtered by the config file if exist
  */
 function generateQuestions() {
-  const questionKeys = Object.keys(questions)
+  const questionKeys = Object.keys(questions);
 
-  if (!config) {
-    return questionKeys.map(question => questions[question])
-  }
-
-  const filteredQuestions = []
-
-  questionKeys.forEach((question) => {
-    if (!config[question]) {
-      filteredQuestions.push(questions[question])
-    }
-  })
-
-  return filteredQuestions
+  return questionKeys.map(question => questions[question]);
 }
 
 /**
@@ -61,20 +20,14 @@ function generateQuestions() {
  */
 async function start() {
   try {
-    const filteredQuestions = generateQuestions()
+    const filteredQuestions = generateQuestions();
+    const requirements = await inquirer.prompt(filteredQuestions);
 
-    const requirements = await inquirer.prompt(filteredQuestions)
+    generateBoilerplate(requirements);
 
-    const results = {
-      ...config,
-      ...requirements,
-    }
-
-    generateFiles(results)
-
-    console.log('Your component is created!')
-  } catch (e) {
-    console.log(e)
+    console.log('Your component is created!');
+  } catch (err) {
+    console.log(err);
   }
 }
 
