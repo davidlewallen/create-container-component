@@ -38,7 +38,7 @@ function DefaultName(props) {
 DefaultName.propTypes = propTypes;
 export default DefaultName;
 ```
-Creating with container
+Creating with container:
 ```
 ProvidedName
     |-- components
