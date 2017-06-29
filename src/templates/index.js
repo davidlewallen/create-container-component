@@ -14,7 +14,7 @@ import generateComponent from './js/component.template';
 function generateBoilerplate({ type, name, connected, path}) {
   const destination = `${path}/${name}/`;
 
-  if (connected || type === 'container') {
+  if (type === 'container') {
     fs.outputFile(`${destination}/container/${name}.jsx`, generateContainer(name, connected));
   }
   fs.outputFile(`${destination}/components/index.jsx`, generateComponent(name));
