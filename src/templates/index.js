@@ -15,7 +15,7 @@ function generateBoilerplate({ type, name, connected, path}) {
   const destination = `${path}/${name}/`;
 
   if (type === 'container') {
-    fs.outputFile(`${destination}/container/${name}.jsx`, generateContainer(name, connected));
+    fs.outputFile(`${destination}/container/${name}Container.jsx`, generateContainer(name, connected));
   }
   fs.outputFile(`${destination}/components/index.jsx`, generateComponent(name));
 }
