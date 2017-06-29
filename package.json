@@ -1,6 +1,6 @@
 {
   "name": "create-container-component",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Tool to generate React container and/or components from the terminal",
   "bin": {
     "create-container-component": "./dist/index.js"
